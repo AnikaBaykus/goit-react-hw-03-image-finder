@@ -1,7 +1,50 @@
 import './App.css';
+import React, { Component } from 'react';
 
-function App() {
-  return <div className="App"></div>;
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import SearchBar from './SearchBar';
+
+import ImageInfo from './ImageInfo';
+// import ImageGallery from './ImageGallery';
+
+export class App extends Component {
+  static defaultProps = {};
+  state = {
+    imageName: '',
+  };
+
+  handleSearchFormSubmit = imageName => {
+    this.setState({ imageName });
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <SearchBar onSearchFormSubmit={this.handleSearchFormSubmit} />
+
+        <ImageInfo imageName={this.state.imageName} />
+
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+      </div>
+    );
+  }
 }
 
 export default App;
+
+// {
+//   images && <ImageGallery images={images} />;
+// }

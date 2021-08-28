@@ -1,0 +1,11 @@
+.Loader {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  align-content: center;
+}
+
+.Spinner {
+  display: flex;
+  align-items: center;
+}
