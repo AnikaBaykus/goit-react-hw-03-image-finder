@@ -1,13 +1,10 @@
 import './App.css';
 import React, { Component } from 'react';
-
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import SearchBar from './SearchBar';
-
 import ImageInfo from './ImageInfo';
-// import ImageGallery from './ImageGallery';
 
 export class App extends Component {
   static defaultProps = {};
@@ -44,7 +41,3 @@ export class App extends Component {
 }
 
 export default App;
-
-// {
-//   images && <ImageGallery images={images} />;
-// }

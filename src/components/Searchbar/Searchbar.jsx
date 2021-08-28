@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import SearchForm from '../SearchForm/SearchForm';
 import s from './SearchBar.module.css';
 
@@ -9,4 +9,8 @@ function SearchBar({ onSearchFormSubmit }) {
     </header>
   );
 }
+
+SearchBar.protoTypes = {
+  onSearchFormSubmit: PropTypes.func.isRequired,
+};
 export default SearchBar;

@@ -1,12 +1,10 @@
 import { Component } from 'react';
-import { createPortal } from 'react-dom';
 import s from './Loader.module.css';
 import Loader from 'react-loader-spinner';
 
-const loaderRoot = document.querySelector('#loader-root');
 export default class LoaderMy extends Component {
   render() {
-    return createPortal(
+    return (
       <div className={s.Loader}>
         <Loader
           className={s.Spinner}
@@ -16,8 +14,7 @@ export default class LoaderMy extends Component {
           width={100}
           timeout={5000} //3 secs
         />
-      </div>,
-      loaderRoot,
+      </div>
     );
   }
 }

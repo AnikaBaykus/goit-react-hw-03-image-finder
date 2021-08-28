@@ -24,8 +24,10 @@ export default class SearchForm extends Component {
   };
 
   render() {
+    const { handleSubmit, handleNameChange } = this;
+    const { imageName } = this.state;
     return (
-      <form onSubmit={this.handleSubmit} className={s.SearchForm}>
+      <form onSubmit={handleSubmit} className={s.SearchForm}>
         <button type="submit" className={s.SearchFormButton}>
           <span className={s.SearchFormButtonLabel}>Search</span>
         </button>
@@ -36,8 +38,8 @@ export default class SearchForm extends Component {
           autoComplete="off"
           autoFocus
           placeholder="Search images and photos"
-          value={this.state.imageName}
-          onChange={this.handleNameChange}
+          value={imageName}
+          onChange={handleNameChange}
         />
       </form>
     );

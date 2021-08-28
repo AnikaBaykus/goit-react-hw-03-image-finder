@@ -21,15 +21,37 @@ export default class ImageInfo extends Component {
     const prevImage = prevProps.imageName;
     const nextImage = this.props.imageName;
 
+    const prevPage = prevState.page;
+    const nextPage = this.state.page;
+
     if (prevImage !== nextImage) {
       this.setState({ status: 'pending', hits: null });
 
       imageAPI
-        .fetchImage(nextImage)
+        .fetchImage(nextImage, prevPage)
         .then(({ hits }) => {
           this.setState({ hits, status: 'resolve' });
         })
         .catch(error => this.setState({ error, status: 'rejected' }));
+    }
+
+    if (prevPage !== nextPage && nextPage !== 1) {
+      //   this.setState({ status: 'pending' });
+      imageAPI
+        .fetchImage(nextImage, nextPage)
+        .then(({ hits }) => {
+          this.setState(prevState => ({
+            hits: [...prevState.hits, ...hits],
+            status: 'resolve',
+          }));
+        })
+        .catch(error => this.setState({ error, status: 'rejected' }))
+        .finally(() => {
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth',
+          });
+        });
     }
   }
 
@@ -46,8 +68,16 @@ export default class ImageInfo extends Component {
     this.toggleModal();
   };
 
+  clickLoadMore = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+      status: 'pending',
+    }));
+  };
+
   render() {
-    const { hits, error, status } = this.state;
+    const { hits, error, status, src, alt, showModal } = this.state;
+    const { openImage, clickLoadMore, toggleModal } = this;
 
     if (status === 'idle') {
       return <div></div>;
@@ -58,15 +88,11 @@ export default class ImageInfo extends Component {
     if (status === 'resolve') {
       return (
         <div>
-          <ImageGallery hits={hits} onClickImage={this.openImage} />
+          <ImageGallery hits={hits} onClickImage={openImage} />
 
-          {hits.length !== 0 && <Button onLoadMore={this.componentDidUpdate} />}
-          {this.state.showModal && (
-            <Modal
-              src={this.state.src}
-              alt={this.state.src}
-              onCloseModal={this.toggleModal}
-            />
+          {hits.length !== 0 && <Button onLoadMore={clickLoadMore} />}
+          {showModal && (
+            <Modal src={src} alt={alt} onCloseModal={toggleModal} />
           )}
         </div>
       );
