@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import s from './ImageGalleryItem.module.css';
-import { uuid } from 'uuidv4';
+import { v4 as uuidv4 } from 'uuid';
 
 function ImageGalleryItem({ webformatURL, tags, largeImageURL, onClickImage }) {
-  const imgId = uuid();
+  const imgId = uuidv4();
   return (
     <li key={imgId} className={s.ImageGalleryItem} onClick={onClickImage}>
       <img

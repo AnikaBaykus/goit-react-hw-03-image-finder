@@ -25,7 +25,7 @@ export default class ImageInfo extends Component {
     const nextPage = this.state.page;
 
     if (prevImage !== nextImage) {
-      this.setState({ status: 'pending', hits: null });
+      this.setState({ status: 'pending' });
 
       imageAPI
         .fetchImage(nextImage, prevPage)
@@ -36,7 +36,7 @@ export default class ImageInfo extends Component {
     }
 
     if (prevPage !== nextPage && nextPage !== 1) {
-      //   this.setState({ status: 'pending' });
+      this.setState({ loaderStatus: true });
       imageAPI
         .fetchImage(nextImage, nextPage)
         .then(({ hits }) => {
