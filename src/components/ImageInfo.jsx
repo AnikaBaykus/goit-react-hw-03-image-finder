@@ -36,7 +36,6 @@ export default class ImageInfo extends Component {
     }
 
     if (prevPage !== nextPage && nextPage !== 1) {
-      this.setState({ loaderStatus: true });
       imageAPI
         .fetchImage(nextImage, nextPage)
         .then(({ hits }) => {
