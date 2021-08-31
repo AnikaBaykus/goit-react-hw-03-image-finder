@@ -8,55 +8,59 @@ import Modal from './Modal/Modal.jsx';
 
 export default class ImageInfo extends Component {
   state = {
-    hits: null,
+    hits: [],
     error: null,
     status: 'idle',
     showModal: false,
     alt: '',
     src: '',
     page: 1,
+    isLoading: '',
+    imageName: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
     const prevImage = prevProps.imageName;
     const nextImage = this.props.imageName;
-
-    const prevPage = prevState.page;
-    const nextPage = this.state.page;
-
     if (prevImage !== nextImage) {
-      this.setState({ status: 'pending' });
-
-      imageAPI
-        .fetchImage(nextImage, prevPage)
-        .then(({ hits }) => {
-          this.setState({ hits, status: 'resolve' });
-        })
-        .catch(error => this.setState({ error, status: 'rejected' }));
-    }
-
-    if (prevPage !== nextPage && nextPage !== 1) {
-      imageAPI
-        .fetchImage(nextImage, nextPage)
-        .then(({ hits }) => {
-          this.setState(prevState => ({
-            hits: [...prevState.hits, ...hits],
-            status: 'resolve',
-          }));
-        })
-        .catch(error => this.setState({ error, status: 'rejected' }))
-        .finally(() => {
-          window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: 'smooth',
-          });
-        });
+      this.setState({ hits: [], page: 1, status: 'pending' });
+      this.fetchImg();
     }
   }
 
+  fetchImg = () => {
+    const { page, isLoading, hits } = this.state;
+    const { imageName } = this.props;
+    console.log(page, imageName, hits, isLoading);
+
+    if (!imageName) {
+      return;
+    }
+
+    this.setState({ isLoading: true });
+    console.log(isLoading);
+
+    imageAPI
+      .fetchImage(imageName, page)
+      .then(({ hits }) => {
+        this.setState((prevProps, prevState) => ({
+          hits: [...prevProps.hits, ...hits],
+          status: 'resolve',
+          page: prevProps.page + 1,
+        }));
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: 'smooth',
+        });
+      })
+      .catch(error => this.setState({ error, status: 'rejected' }))
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
+  };
+
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
-    console.log('клик');
   };
 
   openImage = event => {
@@ -67,16 +71,9 @@ export default class ImageInfo extends Component {
     this.toggleModal();
   };
 
-  clickLoadMore = () => {
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-      status: 'pending',
-    }));
-  };
-
   render() {
-    const { hits, error, status, src, alt, showModal } = this.state;
-    const { openImage, clickLoadMore, toggleModal } = this;
+    const { hits, error, status, src, alt, showModal, isLoading } = this.state;
+    const { openImage, fetchImg, toggleModal } = this;
 
     if (status === 'idle') {
       return <div></div>;
@@ -88,8 +85,9 @@ export default class ImageInfo extends Component {
       return (
         <div>
           <ImageGallery hits={hits} onClickImage={openImage} />
+          {isLoading === true && <LoaderMy />}
 
-          {hits.length !== 0 && <Button onLoadMore={clickLoadMore} />}
+          {hits.length !== 0 && <Button onLoadMore={fetchImg} />}
           {showModal && (
             <Modal src={src} alt={alt} onCloseModal={toggleModal} />
           )}

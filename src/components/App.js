@@ -12,8 +12,8 @@ export class App extends Component {
     imageName: '',
   };
 
-  handleSearchFormSubmit = imageName => {
-    this.setState({ imageName });
+  handleSearchFormSubmit = data => {
+    this.setState({ imageName: data.trim() });
   };
 
   render() {
