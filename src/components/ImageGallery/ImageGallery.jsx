@@ -3,7 +3,7 @@ import ImageGalleryItem from '../ImageGalleryItem';
 import s from './ImageGallery.module.css';
 
 function ImageGallery({ hits, onClickImage }) {
-  console.log(hits);
+  // console.log(hits);
   return (
     <ul className={s.ImageGallery}>
       {hits.map(({ webformatURL, tags, largeImageURL }, i) => (

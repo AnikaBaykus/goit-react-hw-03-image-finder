@@ -23,26 +23,27 @@ export default class ImageInfo extends Component {
     const prevImage = prevProps.imageName;
     const nextImage = this.props.imageName;
     if (prevImage !== nextImage) {
-      this.setState({ hits: [], page: 1, status: 'pending' });
+      this.setState({ hits: [], status: 'pending' });
       this.fetchImg();
     }
   }
 
   fetchImg = () => {
-    const { page, isLoading, hits } = this.state;
+    const { page } = this.state;
     const { imageName } = this.props;
-    console.log(page, imageName, hits, isLoading);
+    // console.log(page, imageName, hits, isLoading);
 
     if (!imageName) {
       return;
     }
 
     this.setState({ isLoading: true });
-    console.log(isLoading);
+    // console.log(isLoading);
 
     imageAPI
       .fetchImage(imageName, page)
       .then(({ hits }) => {
+        // console.log(hits);
         this.setState((prevProps, prevState) => ({
           hits: [...prevProps.hits, ...hits],
           status: 'resolve',
